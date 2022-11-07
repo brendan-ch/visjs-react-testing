@@ -1,4 +1,12 @@
+.App {
+  padding: 16px;
+}
+
 .graphContainer {
   width: 600px;
   height: 600px;
+  
+  border-width: 1px;
+  border-color: black;
+  border-style: solid;
 }
