@@ -1,9 +1,15 @@
 import './App.css';
 import { Network } from 'vis-network';
 import { DataSet } from 'vis-data';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 function App() {
+  const [textDisplay, setTextDisplay] = useState('Click on a node!');
+  const [posX, setPosX] = useState(undefined);
+  const [posY, setPosY] = useState(undefined);
+
+  // Create ref to graph
+  // All graph interactions are done imperatively
   const graphEl = useRef(null);
 
   useEffect(() => {
@@ -36,8 +42,16 @@ function App() {
     network.on('click', (params) => {
       console.log(params);
       // Create React state change on click
+      if (params.nodes[0]) {
+        setTextDisplay(`Node ${params.nodes[0]} selected`);
+      } else {
+        setTextDisplay('No node selected');        
+      }
+      setPosX(params.pointer.canvas.x);
+      setPosY(params.pointer.canvas.y);
     });
 
+    // Destroy network instance to prevent memory leak
     return () => {
       network.destroy();
     };
@@ -47,7 +61,10 @@ function App() {
     <div className="App">
       <div ref={graphEl} className="graphContainer">
       </div>
-      <p>Something is about to go down...</p>
+      <p>{textDisplay}</p>
+      <p>Mouse position X: {posX}</p>
+      <p>Mouse position Y: {posY}</p>
+      
     </div>
   );
 }
